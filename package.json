@@ -2,7 +2,6 @@
   "name": "usedcar-showroom",
   "version": "0.1.0",
   "private": true,
-
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,14 +9,14 @@
     "lint": "next lint",
     "process-images": "node scripts/process-images.js"
   },
-
   "dependencies": {
-    "next": "^14.2.18",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "next": "14.2.18",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
+    "eslint": "8.57.0",
     "eslint-config-next": "14.2.18"
   }
 }
