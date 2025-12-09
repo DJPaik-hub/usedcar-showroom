@@ -1,14 +1,37 @@
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
+  const [cars, setCars] = useState([]);
 
-  const cars = [
-    { id: 1, name: 'Car 1', price: '6000만원', image: '/cars/car1.png' },
-    { id: 2, name: 'Car 2', price: '12000만원', image: '/cars/car2.png' },
-    { id: 3, name: 'Car 3', price: '18000만원', image: '/cars/car3.png' },
-    { id: 4, name: 'Car 4', price: '26000만원', image: '/cars/car4.png' }
-  ];
+  useEffect(() => {
+    fetch('https://docs.google.com/spreadsheets/d/1O20FPRuyN3ZAZ_z_Ho1kBGz7Gqw4P9CXvzbWY3dAjcQ/export?format=csv&gid=0')
+      .then(res => res.text())
+      .then(csv => {
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
+        const carData = [];
+        for (let i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          const values = lines[i].split(',');
+          const car = {};
+          headers.forEach((h, idx) => {
+            car[h.trim()] = values[idx]?.trim();
+          });
+          if (car.status === '판매중') {
+            carData.push({
+              id: car.id,
+              name: car.name,
+              price: parseInt(car.price || 0).toLocaleString() + '원',
+              image: car.mainImage
+            });
+          }
+        }
+        setCars(carData);
+      })
+      .catch(err => console.error('차량 데이터 로드 실패:', err));
+  }, []);
 
   const shown = cars.slice(0, 4);
 
